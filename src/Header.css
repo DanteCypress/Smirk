@@ -50,6 +50,7 @@
 .header__basketCount {
   margin-left: 10px;
   margin-right: 10px;
+  text-decoration: "none";
 }
 .header__nav {
   display: flex;
@@ -62,4 +63,8 @@
   margin-left: 10px;
   margin-right: 10px;
   color: white;
+}
+.link {
+  color: #fff;
+  text-decoration: none;
 }
