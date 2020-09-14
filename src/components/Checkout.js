@@ -26,6 +26,7 @@ function Checkout() {
               price={item.price}
             />
           ))}
+
           {/* Basket Item */}
         </div>
       </div>
