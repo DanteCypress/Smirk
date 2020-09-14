@@ -14,24 +14,26 @@ function Payment() {
   const [disabled, setDisabled] = useState(true);
   const [succeeded, setSucceeded] = useState(false);
   const [processing, setProcessing] = useState("");
-  const [clientSecret, setclientSecret] = useState(true);
+  const [clientSecret, setClientSecret] = useState(true);
   const history = useHistory;
-
-  useEffect(() => {
-    //generate the unique stripe secret which allows card to be charged
-    const getClientSecret = async () => {
-      const response = await axios({
-        method: "post",
-        //Stripe expect the total in a curriences subunits $1 = 100 // $10 = 1000
-        url: `/payments/create?total=${getBasketTotal(basket) * 100}`,
-      });
-      setclientSecret(response.data.clientSecret);
-    };
-    getClientSecret();
-  }, [basket]);
 
   const stripe = useStripe();
   const elements = useElements();
+
+  useEffect(() => {
+    // generate the special stripe secret which allows us to charge a customer
+    const getClientSecret = async () => {
+      const response = await axios({
+        method: "post",
+        // Stripe expects the total in a currencies subunits
+        url: `/payments/create?total=${getBasketTotal(basket) * 100}`,
+      });
+      setClientSecret(response.data.clientSecret);
+    };
+
+    getClientSecret();
+  }, [basket]);
+  console.log(clientSecret);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,7 +41,7 @@ function Payment() {
 
     // const payload =await stripe
     const payload = await stripe
-      .confirmedCardPayment(clientSecret, {
+      .confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement),
         },
